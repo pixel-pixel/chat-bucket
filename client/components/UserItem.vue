@@ -1,32 +1,29 @@
 <template>
   <div class="chat-li">
-    <img class="photo" :src="imgURL" />
-    <div class="online" v-show="!online" />
+    <img class="photo" :src="user.imgURL" />
+    <div v-show="user.online" class="online" />
 
     <div class="text-div">
-      <h6 class="name">{{ name }}</h6>
-      <p class="last-msg">{{ lastMsg }}</p>
+      <h6 class="name">{{ user.name }}</h6>
+      <p class="last-msg">{{ user.lastMsg }}</p>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'nuxt-property-decorator';
-import { Context } from '@nuxt/types';
+import { User } from '../types/User.type';
 
-@Component({name: 'ChatListItem'})
-export default class Index extends Vue {
-  @Prop() name = 'No Name'
-  @Prop() imgURL = 'https://stekoltd.kz/assets/img/otzivi/hab.jpg'
-  @Prop() online = false
-  @Prop() lastMsg = 'Lorem ipsum dolor sit amet consectetur adipisicing elit.'
+@Component({name: 'ListItem'})
+export default class extends Vue {
+  @Prop() user!: User
 }
 </script>
 
 <style scoped>
   .chat-li {
     display: flex;
-    width: 100%;
+    width: calc(100% - 2rem);
     position: relative;
     padding: .5rem 1rem;
 
@@ -71,5 +68,5 @@ export default class Index extends Vue {
     font-size: 1.25rem;
   }
 
-  
+
 </style>
