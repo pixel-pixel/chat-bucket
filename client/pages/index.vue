@@ -10,6 +10,7 @@
 <script lang='ts'>
 import { Component, Vue } from 'nuxt-property-decorator'
 import { Message } from '~/client/types/Message.type'
+import { Socket } from 'vue-socket.io-extended'
 
 @Component({ name: 'Index' })
 export default class Index extends Vue {
@@ -93,6 +94,15 @@ export default class Index extends Vue {
       online: false
     },
   ]
+
+  mounted() {
+    this.$socket.client.emit('addOne', 'puk')
+  }
+
+  @Socket('addOne')
+  addOne(msg: string) {
+    console.log(msg)
+  }
 }
 </script>
 
