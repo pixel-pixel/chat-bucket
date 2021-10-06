@@ -1,7 +1,7 @@
 <template>
-  <div class='message' :class='{"message_my": msg.isMy}'>
+  <div class='message'>
     <div class='head'>
-      <span class='username'>{{ msg.username }}</span>
+      <span class='username'>{{ msg.senderName }}</span>
       <span class='time'>{{ msg.time }}</span>
     </div>
 
@@ -13,7 +13,7 @@
 
 <script lang='ts'>
 import { Component, Prop, Vue } from 'nuxt-property-decorator'
-import { Message } from '~/client/types/Message.type'
+import { Message } from '~/common/types/Message.type'
 
 @Component({name: 'Message'})
 export default class extends Vue {

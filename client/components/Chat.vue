@@ -3,28 +3,65 @@
     <UserInfo :user='user'/>
 
     <div class='messages'>
-      <Message v-for='msg in chatHistory' :key='msg.text' :msg='msg' />
+      <Message v-for='msg in messages' :key='msg.text' :msg='msg' />
     </div>
 
     <div class='controls'>
-      <input type='text'>
-      <button>Send message</button>
+      <input v-model='messageText' type='text'>
+      <button @click='sendMsg'>Send message</button>
     </div>
   </div>
 </template>
 
 <script lang='ts'>
 import { Component, Prop, Vue } from 'nuxt-property-decorator'
-import { Message } from '~/client/types/Message.type'
+import { NuxtSocket } from 'nuxt-socket-io'
+import { Message } from '~/common/types/Message.type'
+import { User } from '~/common/types/User.type'
+import { Chat } from '~/common/types/Chat.type'
 
 @Component({name: 'Chat'})
 export default class extends Vue {
-  @Prop() chatHistory!: Message[]
-  user =  {
-    name: 'kek1',
-    lastMsg: 'sfsf',
-    imgURL: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8dXNlcnxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80',
-    online: false
+  @Prop() me!: User
+  @Prop() user!: User
+
+  socket!: NuxtSocket
+  messages: Message[] = []
+  messageText: string = ''
+
+  mounted() {
+    this.socket = this.$nuxtSocket({
+      reconnection: false
+    })
+
+    this.subsToMessages()
+  }
+
+  getMessages() {
+
+  }
+
+  subsToMessages() {
+    this.socket.on('UPDATE_CHATS_FOR' + this.me?.id, (chats: Chat[]) => {
+      console.log('kek' + chats)
+      this.messages = chats.find(c => (
+        c.firstId === this.user.id ||
+        c.secondId === this.user.id
+      ))?.messages ?? []
+    })
+  }
+
+  sendMsg() {
+    const msg: Message = {
+      senderId: this.me.id,
+      senderName: this.me.name,
+      recipientId: this.user.id,
+      recipientName: this.user.name,
+      text: this.messageText,
+      time: '4:20 AM'
+    }
+
+    this.socket.emit('SEND_MESSAGE', msg)
   }
 }
 </script>

@@ -12,7 +12,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'nuxt-property-decorator';
-import { User } from '../types/User.type';
+import { User } from '../../common/types/User.type';
 
 @Component({name: 'ListItem'})
 export default class extends Vue {
