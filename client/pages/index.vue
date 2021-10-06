@@ -1,7 +1,6 @@
 <template>
   <div class='root'>
     <div class='chat'>
-
       <Chat :chat-history='messages' />
     </div>
     <UserList :users='users' class='user-list' />
@@ -74,7 +73,6 @@ export default class Index extends Vue {
       isSeen: false
     },
   ]
-
   users = [
     {
       name: 'kek1',
