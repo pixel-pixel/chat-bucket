@@ -1,7 +1,7 @@
 <template>
   <div class='root'>
     <div class='chat'>
-      <UserInfo class='user-info' :user='users[0]' />
+      <Chat :chat-history='messages' />
     </div>
     <UserList :users='users' class='user-list' />
   </div>
@@ -9,10 +9,70 @@
 
 <script lang='ts'>
 import { Component, Vue } from 'nuxt-property-decorator'
+import { Message } from '~/client/types/Message.type'
 
 @Component({ name: 'Index' })
 export default class Index extends Vue {
   arr = ['kek', 'lol', 'lalka']
+  messages: Message[] = [
+    {
+      username: 'Andrii Bartish',
+      text: 'Привіт, ну що там з грошами?',
+      time: '4:20 AM',
+      isSeen: false
+    },
+    {
+      username: 'Andrii Bartish',
+      text: 'Привіт, ну що там з грошами??',
+      time: '4:20 AM',
+      isSeen: false,
+      isMy: true
+    },
+    {
+      username: 'Andrii Bartish',
+      text: 'Привіт, ну що там з грошами???',
+      time: '4:20 AM',
+      isSeen: false
+    },
+    {
+      username: 'Andrii Bartish',
+      text: 'Привіт, ну що там з грошами?',
+      time: '4:20 AM',
+      isSeen: false
+    },
+    {
+      username: 'Andrii Bartish',
+      text: 'Привіт, ну що там з грошами??',
+      time: '4:20 AM',
+      isSeen: false,
+      isMy: true
+    },
+    {
+      username: 'Andrii Bartish',
+      text: 'Привіт, ну що там з грошами???',
+      time: '4:20 AM',
+      isSeen: false
+    },
+    {
+      username: 'Andrii Bartish',
+      text: 'Привіт, ну що там з грошами?',
+      time: '4:20 AM',
+      isSeen: false
+    },
+    {
+      username: 'Andrii Bartish',
+      text: 'Привіт, ну що там з грошами??',
+      time: '4:20 AM',
+      isSeen: false,
+      isMy: true
+    },
+    {
+      username: 'Andrii Bartish',
+      text: 'Привіт, ну що там з грошами???',
+      time: '4:20 AM',
+      isSeen: false
+    },
+  ]
   users = [
     {
       name: 'kek1',
@@ -56,6 +116,14 @@ export default class Index extends Vue {
   top: 0
 }
 
+.chat {
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  width: 50%;
+  max-height: 100%;
+}
+
 .user-list {
   width: 50%;
 }
@@ -65,5 +133,6 @@ input[type='text'] {
   height: 2.75rem;
 
   border-radius: .3rem;
+  box-sizing: border-box;
 }
 </style>
