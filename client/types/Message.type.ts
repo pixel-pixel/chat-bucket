@@ -3,4 +3,5 @@ export type Message = {
   text: string
   time: string
   isSeen?: boolean
+  isMy?: boolean
 }

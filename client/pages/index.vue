@@ -1,8 +1,8 @@
 <template>
   <div class='root'>
     <div class='chat'>
-      <UserInfo class='user-info' :user='users[0]' />
-      <Message v-for='msg in messages' :key='msg.text' :msg='msg'/>
+
+      <Chat :chat-history='messages' />
     </div>
     <UserList :users='users' class='user-list' />
   </div>
@@ -26,7 +26,46 @@ export default class Index extends Vue {
       username: 'Andrii Bartish',
       text: 'Привіт, ну що там з грошами??',
       time: '4:20 AM',
+      isSeen: false,
+      isMy: true
+    },
+    {
+      username: 'Andrii Bartish',
+      text: 'Привіт, ну що там з грошами???',
+      time: '4:20 AM',
       isSeen: false
+    },
+    {
+      username: 'Andrii Bartish',
+      text: 'Привіт, ну що там з грошами?',
+      time: '4:20 AM',
+      isSeen: false
+    },
+    {
+      username: 'Andrii Bartish',
+      text: 'Привіт, ну що там з грошами??',
+      time: '4:20 AM',
+      isSeen: false,
+      isMy: true
+    },
+    {
+      username: 'Andrii Bartish',
+      text: 'Привіт, ну що там з грошами???',
+      time: '4:20 AM',
+      isSeen: false
+    },
+    {
+      username: 'Andrii Bartish',
+      text: 'Привіт, ну що там з грошами?',
+      time: '4:20 AM',
+      isSeen: false
+    },
+    {
+      username: 'Andrii Bartish',
+      text: 'Привіт, ну що там з грошами??',
+      time: '4:20 AM',
+      isSeen: false,
+      isMy: true
     },
     {
       username: 'Andrii Bartish',
@@ -72,8 +111,6 @@ export default class Index extends Vue {
   position: relative;
   width: 100vw;
   height: 100vh;
-
-  background-color: lightgray;
 }
 
 .user-info {
@@ -82,7 +119,11 @@ export default class Index extends Vue {
 }
 
 .chat {
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
   width: 50%;
+  max-height: 100%;
 }
 
 .user-list {
@@ -94,5 +135,6 @@ input[type='text'] {
   height: 2.75rem;
 
   border-radius: .3rem;
+  box-sizing: border-box;
 }
 </style>
