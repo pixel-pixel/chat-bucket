@@ -21,12 +21,7 @@ export default {
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [
-    {
-      src: '~/plugins/socket.io.ts',
-      ssr: false,
-    },
-  ],
+  plugins: [],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -39,16 +34,15 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
-    // https://go.nuxtjs.dev/axios
-    '@nuxtjs/axios',
+    'nuxt-socket-io',
   ],
-
-  // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {
-    baseURL: 'http://localhost:4000/api'
+  io: {
+    sockets: [{
+        name: 'chat',
+        url: 'http://localhost:8080'
+      }]
   },
 
-  // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
   },
   srcDir: 'client/'

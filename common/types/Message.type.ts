@@ -1,7 +1,8 @@
 export type Message = {
-  username: string
+  senderId: number
+  senderName: string
+  recipientId: number
+  recipientName: string
   text: string
   time: string
-  isSeen?: boolean
-  isMy?: boolean
 }

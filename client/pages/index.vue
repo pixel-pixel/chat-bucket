@@ -1,107 +1,85 @@
 <template>
-  <div class='root'>
+  <div v-show='me' class='root'>
     <div class='chat'>
-      <Chat :chat-history='messages' />
+      <Chat
+        v-if='chatUser !== null'
+        :me='me'
+        :user='chatUser'
+        :chat-history='messages'
+      />
     </div>
-    <UserList :users='users' class='user-list' />
+    <UserList
+      :users='users'
+      :on-choose='(id) => {chatUser = users.find(u => u.id === id)}'
+      class='user-list'
+    />
   </div>
 </template>
 
 <script lang='ts'>
 import { Component, Vue } from 'nuxt-property-decorator'
-import { Message } from '~/client/types/Message.type'
-import { Socket } from 'vue-socket.io-extended'
+import { NuxtSocket } from 'nuxt-socket-io'
+import { Message } from '~/common/types/Message.type'
+import { User } from '~/common/types/User.type'
+import { Chat } from '~/common/types/Chat.type'
 
 @Component({ name: 'Index' })
 export default class Index extends Vue {
-  arr = ['kek', 'lol', 'lalka']
-  messages: Message[] = [
-    {
-      username: 'Andrii Bartish',
-      text: 'Привіт, ну що там з грошами?',
-      time: '4:20 AM',
-      isSeen: false
-    },
-    {
-      username: 'Andrii Bartish',
-      text: 'Привіт, ну що там з грошами??',
-      time: '4:20 AM',
-      isSeen: false,
-      isMy: true
-    },
-    {
-      username: 'Andrii Bartish',
-      text: 'Привіт, ну що там з грошами???',
-      time: '4:20 AM',
-      isSeen: false
-    },
-    {
-      username: 'Andrii Bartish',
-      text: 'Привіт, ну що там з грошами?',
-      time: '4:20 AM',
-      isSeen: false
-    },
-    {
-      username: 'Andrii Bartish',
-      text: 'Привіт, ну що там з грошами??',
-      time: '4:20 AM',
-      isSeen: false,
-      isMy: true
-    },
-    {
-      username: 'Andrii Bartish',
-      text: 'Привіт, ну що там з грошами???',
-      time: '4:20 AM',
-      isSeen: false
-    },
-    {
-      username: 'Andrii Bartish',
-      text: 'Привіт, ну що там з грошами?',
-      time: '4:20 AM',
-      isSeen: false
-    },
-    {
-      username: 'Andrii Bartish',
-      text: 'Привіт, ну що там з грошами??',
-      time: '4:20 AM',
-      isSeen: false,
-      isMy: true
-    },
-    {
-      username: 'Andrii Bartish',
-      text: 'Привіт, ну що там з грошами???',
-      time: '4:20 AM',
-      isSeen: false
-    },
-  ]
-  users = [
-    {
-      name: 'kek1',
-      lastMsg: 'sfsf',
-      imgURL: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8dXNlcnxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80',
-      online: false
-    },
-    {
-      name: 'kek2',
-      lastMsg: 'sfsf',
-      imgURL: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8dXNlcnxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80',
-      online: true
-    },
-    {
-      name: 'kek3',
-      lastMsg: 'sfsf',
-      imgURL: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8dXNlcnxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80',
-      online: false
-    },
-  ]
+  messages: Message[] = []
+
+  socket!: NuxtSocket
+
+  me: User | null = null
+  users: User[] = []
+  chatUser: User | null = null
 
   mounted() {
-    this.$socket.client.emit('addOne', 'puk')
+    this.socket = this.$nuxtSocket({
+      reconnection: false
+    })
+
+    this.checkUser()
+    this.subsToUsers()
   }
 
-  @Socket('addOne')
-  addOne(msg: string) {
-    console.log(msg)
+  subsToUsers() {
+    this.socket.on('UPDATE_USERS', (arr: User[]) => {
+      this.users = arr.filter(u => u.id !== this.me?.id)
+    })
+  }
+
+  subsToChats() {
+    this.socket.on('UPDATE_CHATS_FOR' + this.me?.id, (chats: Chat[]) => {
+      console.log(chats)
+    })
+  }
+
+  close() {
+    this.exit()
+  }
+
+  enter() {
+    this.socket.emit("ENTER", {id: this.me?.id})
+  }
+
+  exit() {
+    this.socket.emit("EXIT", {id: this.me?.id})
+  }
+
+  checkUser() {
+    const user = localStorage.getItem('user211356q1x1j')
+    if (user) {
+      this.me = JSON.parse(user)
+      this.enter()
+      this.subsToChats()
+    } else {
+      this.socket.emit("CREATE_USER", null, (user: User) => {
+        localStorage.setItem('user211356q1x1j', JSON.stringify(user))
+        this.me = user
+        this.subsToChats()
+      })
+    }
+    console.log('me: ' + this.me?.name)
   }
 }
 </script>

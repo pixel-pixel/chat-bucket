@@ -14,7 +14,12 @@
     </div>
 
     <div class='users'>
-      <UserItem v-for='user in usersList' :key='user.name' :user='user' />
+      <UserItem
+        v-for='user in usersList'
+        :key='user.name'
+        :user='user'
+        @click.native='onChoose(user.id)'
+      />
     </div>
 
     <input v-model='search' class='input' type='text'  />
@@ -23,11 +28,12 @@
 
 <script lang='ts'>
 import { Component, Prop, Vue } from 'nuxt-property-decorator'
-import { User } from '~/client/types/User.type'
+import { User } from '~/common/types/User.type'
 
 @Component({name: 'UserList'})
 export default class extends Vue {
   @Prop() users!: User[]
+  @Prop() onChoose!: (id: number) => void
   isOnline = false
   search = ''
 

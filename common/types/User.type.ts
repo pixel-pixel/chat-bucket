@@ -1,6 +1,7 @@
 export type User = {
+  id: number
   name: string
   imgURL: string
   online: boolean
-  lastMsg?: string | null
+  info: string
 }
