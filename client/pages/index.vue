@@ -2,6 +2,7 @@
   <div class='root'>
     <div class='chat'>
       <UserInfo class='user-info' :user='users[0]' />
+      <Message v-for='msg in messages' :key='msg.text' :msg='msg'/>
     </div>
     <UserList :users='users' class='user-list' />
   </div>
@@ -9,10 +10,32 @@
 
 <script lang='ts'>
 import { Component, Vue } from 'nuxt-property-decorator'
+import { Message } from '~/client/types/Message.type'
 
 @Component({ name: 'Index' })
 export default class Index extends Vue {
   arr = ['kek', 'lol', 'lalka']
+  messages: Message[] = [
+    {
+      username: 'Andrii Bartish',
+      text: 'Привіт, ну що там з грошами?',
+      time: '4:20 AM',
+      isSeen: false
+    },
+    {
+      username: 'Andrii Bartish',
+      text: 'Привіт, ну що там з грошами??',
+      time: '4:20 AM',
+      isSeen: false
+    },
+    {
+      username: 'Andrii Bartish',
+      text: 'Привіт, ну що там з грошами???',
+      time: '4:20 AM',
+      isSeen: false
+    },
+  ]
+
   users = [
     {
       name: 'kek1',
@@ -49,11 +72,17 @@ export default class Index extends Vue {
   position: relative;
   width: 100vw;
   height: 100vh;
+
+  background-color: lightgray;
 }
 
 .user-info {
   position: relative;
   top: 0
+}
+
+.chat {
+  width: 50%;
 }
 
 .user-list {
