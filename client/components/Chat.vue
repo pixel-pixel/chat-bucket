@@ -4,7 +4,7 @@
 
     <div class='messages'>
       <Message
-        v-for='msg in messages'
+        v-for='msg in messagesReverse'
         :key='msg.text'
         :msg='msg'
         :me='me'
@@ -37,6 +37,10 @@ export default class extends Vue {
 
   socket!: NuxtSocket
   messageText: string = ''
+
+  get messagesReverse() {
+    return this.messages.reverse()
+  }
 
   mounted() {
     this.socket = this.$nuxtSocket({
@@ -84,9 +88,9 @@ export default class extends Vue {
 
 .messages {
   display: flex;
-  flex-direction: column;
-  align-items: stretch;
+  flex-direction: column-reverse;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .controls {
