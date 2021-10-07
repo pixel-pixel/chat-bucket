@@ -1,5 +1,5 @@
 <template>
-  <div class='message'>
+  <div class='message' :class='{"message_my": isMy}'>
     <div class='head'>
       <span class='username'>{{ msg.senderName }}</span>
       <span class='time'>{{ msg.time }}</span>
@@ -14,10 +14,16 @@
 <script lang='ts'>
 import { Component, Prop, Vue } from 'nuxt-property-decorator'
 import { Message } from '~/common/types/Message.type'
+import { User } from '~/common/types/User.type'
 
 @Component({name: 'Message'})
 export default class extends Vue {
   @Prop() msg!: Message
+  @Prop() me!: User
+
+  get isMy() {
+    return this.msg.senderId === this.me.id
+  }
 }
 </script>
 
@@ -30,7 +36,7 @@ export default class extends Vue {
 
   background-color: white;
   border-radius: .5rem;
-  filter: drop-shadow(5px 5px 10px rgba(0, 0, 0, 0.3));
+  filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.3));
 }
 
 .message_my {
@@ -70,12 +76,12 @@ export default class extends Vue {
   align-items: center;
   padding: 1rem;
 
-  background-color: lightblue;
+  background-color: #BECBD9;
   border-top-left-radius: .5rem;
   border-top-right-radius: .5rem;
 }
 .message_my .head {
-  background-color: lightcoral;
+  background-color: #F0CBB3;
 }
 
 .time {
@@ -85,6 +91,4 @@ export default class extends Vue {
 .body {
   padding: 1rem;
 }
-
-
 </style>

@@ -74,11 +74,13 @@ export default class extends Vue {
   width: 100%;
   height: 4rem;
 
-  color: grey;
   box-sizing: border-box;
-  background-color: lightgray;
-  border: 1px grey solid;
+  background-color: #F8F8F8;
+  border: #c6c6c6 1px solid;
   border-top: none;
+}
+.list-btn:not(.list-btn_active):hover {
+  background-color: #e8e8e8;
 }
 .list-btn_active {
   color: black;

@@ -23,6 +23,7 @@ export class ChatGateway {
     }
     this.users.push(user)
     this.server.emit('UPDATE_USERS', this.users)
+    this.server.emit('UPDATE_CHATS_FOR' + user.id, this.getChatsById(user.id))
     return user
   }
 
@@ -42,18 +43,9 @@ export class ChatGateway {
       }
       this.chats.push(chat)
     }
-
     chat.messages.push(msg)
-
-    const sendersChats = this.chats.filter(c => (
-      c.firstId === senderId ||
-      c.secondId === senderId
-    ))
-    const recipientsChats = this.chats.filter(c => (
-      c.firstId === recipientId ||
-      c.secondId === recipientId
-    ))
-
+    const sendersChats = this.getChatsById(senderId)
+    const recipientsChats = this.getChatsById(recipientId)
     this.server.emit('UPDATE_CHATS_FOR' + senderId, sendersChats)
     this.server.emit('UPDATE_CHATS_FOR' + recipientId, recipientsChats)
   }
@@ -66,6 +58,7 @@ export class ChatGateway {
     if (user) user.online = true
 
     this.server.emit('UPDATE_USERS', this.users)
+    this.server.emit('UPDATE_CHATS_FOR' + user?.id, this.getChatsById(user?.id ?? 0))
   }
 
   @SubscribeMessage('EXIT')
@@ -75,5 +68,13 @@ export class ChatGateway {
     if (user) user.online = false
 
     this.server.emit('UPDATE_USERS', this.users)
+  }
+
+  getChatsById(id: number) {
+    const res = this.chats.filter(c => (
+      c.firstId === id ||
+      c.secondId === id
+    ))
+    return res
   }
 }

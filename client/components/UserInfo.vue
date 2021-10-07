@@ -23,11 +23,20 @@ export default class extends Vue {
     display: flex;
     width: 100%;
 
-    background-color: lightblue;
+    background-color: #BECBD9;
   }
 
   .user-info__photo {
     width: 12rem;
     height: 12rem;
+  }
+
+  .user-info__text {
+    padding: 2rem;;
+    line-height: 150%;
+  }
+  .user-info__name {
+    font-size: 1.5rem;
+    margin-bottom: .3rem;
   }
 </style>
