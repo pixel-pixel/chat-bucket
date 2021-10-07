@@ -1,2 +1,2 @@
 # chat-bucket
-```npm run dev``` for run on localhost:3000
+```npm run dev```  for run on localhost:3000
