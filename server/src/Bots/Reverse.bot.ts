@@ -1,14 +1,14 @@
 import { Message } from '../../../common/types/Message.type'
 import Bot from './Bot'
 
-export default class EchoBot extends Bot {
+export default class ReverseBot extends Bot {
   constructor(id: number) {
     super(
       id,
-      'Echo bot',
-      'https://artforlife.ru/wp-content/uploads/2020/12/pre-obzor-amazon-echo-4-go-pokoleniya-2020-g-novyj-zenit.jpg',
+      'Reverse bot',
+      'https://ih1.redbubble.net/image.979634724.6720/st,small,507x507-pad,600x600,f8f8f8.jpg',
       'lorem ipsem',
-      )
+    )
   }
 
   onMessage(msg: Message,  send: (m: Message) => void) {
@@ -18,7 +18,9 @@ export default class EchoBot extends Bot {
       senderId: msg.recipientId,
       recipientName: msg.senderName,
       recipientId: msg.senderId,
+      text: msg.text.split('').reverse().join('')
     }
-    send(botMsg)
+
+    setTimeout(() => send(botMsg), 3000)
   }
 }

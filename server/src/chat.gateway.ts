@@ -5,6 +5,9 @@ import { Chat } from '../../common/types/Chat.type'
 import { Message } from '../../common/types/Message.type'
 import EchoBot from './Bots/Echo.bot'
 import Bot from './Bots/Bot'
+import IgnoreBot from './Bots/Ignore.bot'
+import ReverseBot from './Bots/Reverse.bot'
+import SpamBot from './Bots/Spam.bot'
 
 @WebSocketGateway(8080, { cors: true })
 export class ChatGateway {
@@ -12,7 +15,10 @@ export class ChatGateway {
   server!: any
 
   users: User[] = [
-    new EchoBot(0)
+    new EchoBot(0),
+    new IgnoreBot(1),
+    new ReverseBot(2),
+    new SpamBot(3),
   ]
 
   chats: Chat[] = []
