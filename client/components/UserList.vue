@@ -62,9 +62,9 @@ export default class extends Vue {
   display: flex;
   flex-direction: column;
   justify-content: stretch;
-  height: 100%;
 
   background-color: white;
+  box-sizing: border-box;
 }
 
 .user-list__btns {
