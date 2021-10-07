@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "nest start --debug --watch nuxt",
+    "dev": "nest start --debug --watch & nuxt",
     "dev:client": "nuxt",
     "dev:server": "nest start --debug --watch",
     "build:client": "nuxt build",

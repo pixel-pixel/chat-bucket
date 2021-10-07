@@ -83,8 +83,8 @@ export default class Index extends Vue {
       this.subsToChats()
       this.subsToUsers()
     } else {
-      this.socket.emit('CREATE_USER', null, (user: User) => {
-        localStorage.setItem('UserData120', JSON.stringify(user))
+      this.socket.emit('me', null, (user: User) => {
+        localStorage.setItem('me', JSON.stringify(user))
         window.location.reload()
       })
     }

@@ -88,11 +88,10 @@ export class ChatGateway {
   }
 
   getChatsById(id: number) {
-    const res = this.chats.filter(c => (
+    return  this.chats.filter(c => (
       c.firstId === id ||
       c.secondId === id
     ))
-    return res
   }
 
   getRandomUser(): User {
