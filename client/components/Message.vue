@@ -86,6 +86,7 @@ export default class extends Vue {
 
 .time {
   color: grey;
+  margin-left: 1rem;
 }
 
 .body {

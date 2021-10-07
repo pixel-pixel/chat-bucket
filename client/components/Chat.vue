@@ -46,9 +46,17 @@ export default class extends Vue {
       recipientId: this.user.id,
       recipientName: this.user.name,
       text: this.messageText,
-      time: '4:20 AM'
+      time: this.time
     }
     this.socket.emit('SEND_MESSAGE', msg)
+  }
+
+  get time() {
+    const date = new Date()
+    const hours = date.getHours()
+    const minutes = date.getMinutes()
+    const end = hours > 12 ? ' PM' : ' AM'
+    return hours % 24 + ':' + minutes + end
   }
 }
 </script>
