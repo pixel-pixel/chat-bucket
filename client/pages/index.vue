@@ -105,11 +105,20 @@ export default class Index extends Vue {
   color: #333333;
 }
 
+@media (max-width: 780px) {
+  .root {
+    flex-direction: column;
+  }
+}
+
 .root {
   display: flex;
-  justify-content: stretch;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: start;
+  align-items: stretch;
   position: relative;
-  width: 100vw;
+  max-width: 100vw;
   height: 100vh;
 }
 
@@ -122,16 +131,16 @@ export default class Index extends Vue {
   display: flex;
   flex-direction: column;
   justify-content: stretch;
-  width: 50%;
-  max-height: 100%;
+  flex-grow: 100;
 }
 
 .user-list {
-  width: 50%;
+  width: 500px;
+  flex-grow: 1;
 }
 
 input[type='text'] {
-  width: 100%;
+  width: calc(100% - 1rem);
   height: 3rem;
   margin: 1rem .5rem;
   padding-left: .75rem;

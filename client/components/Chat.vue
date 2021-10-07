@@ -96,9 +96,11 @@ export default class extends Vue {
   justify-content: space-between;
   align-items: stretch;
   width: 100%;
+  min-height: 500px;
   flex-grow: 1;
 
   background-color: #D7DFE7;
+  box-sizing: border-box;
 }
 
 .messages {
