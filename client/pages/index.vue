@@ -20,7 +20,6 @@
 <script lang='ts'>
 import { Component, Vue } from 'nuxt-property-decorator'
 import { NuxtSocket } from 'nuxt-socket-io'
-import { Message } from '~/common/types/Message.type'
 import { User } from '~/common/types/User.type'
 import { Chat } from '~/common/types/Chat.type'
 
@@ -48,7 +47,7 @@ export default class Index extends Vue {
 
       return {
         user: u,
-        lastMsg: msgs[msgs.length - 1]?.text ?? '',
+        lastMsg: msgs[msgs.length - 1]?.text ?? ''
       }
     })
   }
@@ -74,19 +73,18 @@ export default class Index extends Vue {
   }
 
   checkUser() {
-    const user = localStorage.getItem('user211356q1x1j10q2x')
+    const user = localStorage.getItem('user211356q1x1j10q2xq')
     if (user) {
       this.me = JSON.parse(user)
       this.enter()
       this.subsToChats()
     } else {
       this.socket.emit('CREATE_USER', null, (user: User) => {
-        localStorage.setItem('user211356q1x1j10q2x', JSON.stringify(user))
+        localStorage.setItem('user211356q1x1j10q2xq', JSON.stringify(user))
         this.me = user
         this.subsToChats()
       })
     }
-    console.log('me: ' + this.me?.name)
   }
 
   enter() {

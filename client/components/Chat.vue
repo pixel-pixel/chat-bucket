@@ -3,6 +3,9 @@
     <UserInfo :user='user'/>
 
     <div class='messages'>
+      <p v-show='user.typingId === me.id' class='typing'>
+        {{user.name}} is typing...
+      </p>
       <Message
         v-for='msg in messagesReverse'
         :key='msg.text'
@@ -16,6 +19,7 @@
         v-model='messageText'
         type='text'
         placeholder='Start chatting!'
+        @focus='textChanged'
         @keydown.enter='sendMsg'
       />
       <button @click='sendMsg'>Send message</button>
@@ -47,6 +51,16 @@ export default class extends Vue {
     this.socket = this.$nuxtSocket({
       reconnection: false
     })
+  }
+
+  textChanged() {
+    console.log('kek')
+    const text = this.messageText.trim()
+    if(text) {
+      this.socket.emit('TYPING', {who: this.me.id, to: this.user.id})
+    } else {
+      this.socket.emit('TYPING', {who: this.me.id, to: -1})
+    }
   }
 
   sendMsg() {
@@ -92,6 +106,13 @@ export default class extends Vue {
   flex-direction: column-reverse;
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+.typing {
+  align-self: center;
+  margin-bottom: .5rem;
+
+  color: #428BCA;
 }
 
 .controls {
