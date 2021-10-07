@@ -3,7 +3,12 @@
     <UserInfo :user='user'/>
 
     <div class='messages'>
-      <Message v-for='msg in messages' :key='msg.text' :msg='msg' />
+      <Message
+        v-for='msg in messages'
+        :key='msg.text'
+        :msg='msg'
+        :me='me'
+      />
     </div>
 
     <div class='controls'>
@@ -18,36 +23,19 @@ import { Component, Prop, Vue } from 'nuxt-property-decorator'
 import { NuxtSocket } from 'nuxt-socket-io'
 import { Message } from '~/common/types/Message.type'
 import { User } from '~/common/types/User.type'
-import { Chat } from '~/common/types/Chat.type'
 
 @Component({name: 'Chat'})
 export default class extends Vue {
   @Prop() me!: User
   @Prop() user!: User
+  @Prop() messages!: Message[]
 
   socket!: NuxtSocket
-  messages: Message[] = []
   messageText: string = ''
 
   mounted() {
     this.socket = this.$nuxtSocket({
       reconnection: false
-    })
-
-    this.subsToMessages()
-  }
-
-  getMessages() {
-
-  }
-
-  subsToMessages() {
-    this.socket.on('UPDATE_CHATS_FOR' + this.me?.id, (chats: Chat[]) => {
-      console.log('kek' + chats)
-      this.messages = chats.find(c => (
-        c.firstId === this.user.id ||
-        c.secondId === this.user.id
-      ))?.messages ?? []
     })
   }
 
@@ -60,7 +48,6 @@ export default class extends Vue {
       text: this.messageText,
       time: '4:20 AM'
     }
-
     this.socket.emit('SEND_MESSAGE', msg)
   }
 }
@@ -75,7 +62,7 @@ export default class extends Vue {
   width: 100%;
   flex-grow: 1;
 
-  background-color: lightblue;
+  background-color: #D7DFE7;
 }
 
 .messages {
@@ -89,6 +76,7 @@ export default class extends Vue {
   display: flex;
   justify-content: space-around;
   width: 100%;
-  background: yellow;
+
+  background: #D7DFE7;
 }
 </style>

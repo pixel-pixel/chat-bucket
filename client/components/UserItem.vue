@@ -30,7 +30,10 @@ export default class extends Vue {
     background-color: white;
   }
   .chat-li:hover {
-     background-color: lightgray;
+     background-color: #F8F8F8;
+  }
+  .chat-li:active {
+    background-color: #E8E8E8;
   }
 
   .photo {

@@ -5,7 +5,7 @@
         v-if='chatUser !== null'
         :me='me'
         :user='chatUser'
-        :chat-history='messages'
+        :messages='messages'
       />
     </div>
     <UserList
@@ -25,19 +25,23 @@ import { Chat } from '~/common/types/Chat.type'
 
 @Component({ name: 'Index' })
 export default class Index extends Vue {
-  messages: Message[] = []
-
   socket!: NuxtSocket
-
   me: User | null = null
   users: User[] = []
   chatUser: User | null = null
+  chats: Chat[] = []
+
+  get messages() {
+    return this.chats.find(c => (
+      c.firstId === this.chatUser?.id ||
+      c.secondId === this.chatUser?.id
+    ))?.messages ?? []
+  }
 
   mounted() {
     this.socket = this.$nuxtSocket({
       reconnection: false
     })
-
     this.checkUser()
     this.subsToUsers()
   }
@@ -50,36 +54,32 @@ export default class Index extends Vue {
 
   subsToChats() {
     this.socket.on('UPDATE_CHATS_FOR' + this.me?.id, (chats: Chat[]) => {
-      console.log(chats)
+      this.chats = chats
     })
   }
 
-  close() {
-    this.exit()
-  }
-
-  enter() {
-    this.socket.emit("ENTER", {id: this.me?.id})
-  }
-
-  exit() {
-    this.socket.emit("EXIT", {id: this.me?.id})
-  }
-
   checkUser() {
-    const user = localStorage.getItem('user211356q1x1j')
+    const user = localStorage.getItem('user211356q1x1j10')
     if (user) {
       this.me = JSON.parse(user)
       this.enter()
       this.subsToChats()
     } else {
-      this.socket.emit("CREATE_USER", null, (user: User) => {
-        localStorage.setItem('user211356q1x1j', JSON.stringify(user))
+      this.socket.emit('CREATE_USER', null, (user: User) => {
+        localStorage.setItem('user211356q1x1j10', JSON.stringify(user))
         this.me = user
         this.subsToChats()
       })
     }
     console.log('me: ' + this.me?.name)
+  }
+
+  enter() {
+    this.socket.emit('ENTER', { id: this.me?.id })
+  }
+
+  exit() {
+    this.socket.emit('EXIT', { id: this.me?.id })
   }
 }
 </script>
@@ -89,6 +89,7 @@ export default class Index extends Vue {
   font-family: 'Helvetica', 'Arial', sans-serif;
   padding: 0;
   margin: 0;
+  color: #333333;
 }
 
 .root {
@@ -118,9 +119,52 @@ export default class Index extends Vue {
 
 input[type='text'] {
   width: 100%;
-  height: 2.75rem;
+  height: 3rem;
+  margin: 1rem .5rem;
+  padding-left: .75rem;
+  padding-top: .1rem;
 
+  color: #333333;
+  font-size: 1.2rem;
+
+  border: #c6c6c6 2px solid;
   border-radius: .3rem;
   box-sizing: border-box;
+  outline: none;
+}
+
+input[type='text']:hover {
+  filter: drop-shadow(0 0 5px #c6c6c6);
+}
+
+input[type='text']::placeholder {
+  color: #a6a6a6;
+}
+
+input[type='text']:focus {
+
+  border: #62ABEA 1px solid;
+  filter: drop-shadow(0 0 5px #62ABEA);
+}
+
+button {
+  color: white;
+  font-size: 1.1rem;
+  width: 25rem;
+  height: 3rem;
+  margin: 1rem .5rem;
+
+  background-color: #428BCA;
+  border: none;
+  border-radius: .4rem;
+  outline: none;
+}
+
+button:hover {
+  background-color: #62ABEA;
+}
+
+button:active {
+  background-color: #225BAA;
 }
 </style>
