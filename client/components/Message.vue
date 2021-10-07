@@ -30,8 +30,8 @@ export default class extends Vue {
 <style scoped>
 .message {
   position: relative;
-  max-width: 45rem;
-  min-width: 5rem;
+  width: 45rem;
+  max-width: calc(100% - 3rem);
   margin: 1.5rem;
 
   background-color: white;
@@ -86,6 +86,7 @@ export default class extends Vue {
 
 .time {
   color: grey;
+  margin-left: 1rem;
 }
 
 .body {

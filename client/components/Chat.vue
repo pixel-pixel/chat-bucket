@@ -3,8 +3,11 @@
     <UserInfo :user='user'/>
 
     <div class='messages'>
+      <p v-show='user.typingId === me.id' class='typing'>
+        {{user.name}} is typing...
+      </p>
       <Message
-        v-for='msg in messages'
+        v-for='msg in messagesReverse'
         :key='msg.text'
         :msg='msg'
         :me='me'
@@ -12,7 +15,13 @@
     </div>
 
     <div class='controls'>
-      <input v-model='messageText' type='text'>
+      <input
+        v-model='messageText'
+        type='text'
+        placeholder='Start chatting!'
+        @focus='textChanged'
+        @keydown.enter='sendMsg'
+      />
       <button @click='sendMsg'>Send message</button>
     </div>
   </div>
@@ -33,22 +42,49 @@ export default class extends Vue {
   socket!: NuxtSocket
   messageText: string = ''
 
+  get messagesReverse() {
+    const arr = [...this.messages]
+    return arr.reverse()
+  }
+
   mounted() {
     this.socket = this.$nuxtSocket({
       reconnection: false
     })
   }
 
-  sendMsg() {
-    const msg: Message = {
-      senderId: this.me.id,
-      senderName: this.me.name,
-      recipientId: this.user.id,
-      recipientName: this.user.name,
-      text: this.messageText,
-      time: '4:20 AM'
+  textChanged() {
+    console.log('kek')
+    const text = this.messageText.trim()
+    if(text) {
+      this.socket.emit('TYPING', {who: this.me.id, to: this.user.id})
+    } else {
+      this.socket.emit('TYPING', {who: this.me.id, to: -1})
     }
-    this.socket.emit('SEND_MESSAGE', msg)
+  }
+
+  sendMsg() {
+    const text = this.messageText.trim()
+    if (text) {
+      const msg: Message = {
+        senderId: this.me.id,
+        senderName: this.me.name,
+        recipientId: this.user.id,
+        recipientName: this.user.name,
+        text: this.messageText,
+        time: this.time
+      }
+      this.socket.emit('SEND_MESSAGE', msg)
+      this.messageText = ''
+    }
+  }
+
+  get time() {
+    const date = new Date()
+    const hours = date.getHours()
+    const minutes = date.getMinutes()
+    const end = hours > 12 ? ' PM' : ' AM'
+    return hours % 24 + ':' + minutes + end
   }
 }
 </script>
@@ -67,9 +103,16 @@ export default class extends Vue {
 
 .messages {
   display: flex;
-  flex-direction: column;
-  align-items: stretch;
+  flex-direction: column-reverse;
   overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.typing {
+  align-self: center;
+  margin-bottom: .5rem;
+
+  color: #428BCA;
 }
 
 .controls {

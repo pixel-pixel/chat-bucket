@@ -4,4 +4,5 @@ export type User = {
   imgURL: string
   online: boolean
   info: string
+  typingId?: number
 }

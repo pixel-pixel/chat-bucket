@@ -9,7 +9,8 @@
       />
     </div>
     <UserList
-      :users='users'
+      v-if='me !== null'
+      :users-data='usersData'
       :on-choose='(id) => {chatUser = users.find(u => u.id === id)}'
       class='user-list'
     />
@@ -19,7 +20,6 @@
 <script lang='ts'>
 import { Component, Vue } from 'nuxt-property-decorator'
 import { NuxtSocket } from 'nuxt-socket-io'
-import { Message } from '~/common/types/Message.type'
 import { User } from '~/common/types/User.type'
 import { Chat } from '~/common/types/Chat.type'
 
@@ -36,6 +36,20 @@ export default class Index extends Vue {
       c.firstId === this.chatUser?.id ||
       c.secondId === this.chatUser?.id
     ))?.messages ?? []
+  }
+
+  get usersData() {
+    return this.users.map(u => {
+      const msgs = this.chats.find(c => (
+        c.firstId === u.id ||
+        c.secondId === u.id
+      ))?.messages ?? []
+
+      return {
+        user: u,
+        lastMsg: msgs[msgs.length - 1]?.text ?? ''
+      }
+    })
   }
 
   mounted() {
@@ -59,19 +73,18 @@ export default class Index extends Vue {
   }
 
   checkUser() {
-    const user = localStorage.getItem('user211356q1x1j10')
+    const user = localStorage.getItem('user211356q1x1j10q2xq')
     if (user) {
       this.me = JSON.parse(user)
       this.enter()
       this.subsToChats()
     } else {
       this.socket.emit('CREATE_USER', null, (user: User) => {
-        localStorage.setItem('user211356q1x1j10', JSON.stringify(user))
+        localStorage.setItem('user211356q1x1j10q2xq', JSON.stringify(user))
         this.me = user
         this.subsToChats()
       })
     }
-    console.log('me: ' + this.me?.name)
   }
 
   enter() {

@@ -1,4 +1,5 @@
 import { MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets'
+import { adjectives, Config, names, uniqueNamesGenerator } from 'unique-names-generator'
 import { User } from '../../common/types/User.type'
 import { Chat } from '../../common/types/Chat.type'
 import { Message } from '../../common/types/Message.type'
@@ -13,14 +14,7 @@ export class ChatGateway {
 
   @SubscribeMessage('CREATE_USER')
   handleCreateUser() {
-    const userCount = this.users.length
-    const user: User = {
-      id: userCount,
-      name: 'Vasya Pupkin' + userCount,
-      imgURL: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8dXNlcnxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80',
-      online: true,
-      info: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. A animi deserunt ea esse magnam quidem sunt? Ad aperiam, blanditiis debitis, ducimus esse fuga iure maxime molestiae praesentium recusandae, repudiandae vel?'
-    }
+    const user = this.getRandomUser()
     this.users.push(user)
     this.server.emit('UPDATE_USERS', this.users)
     this.server.emit('UPDATE_CHATS_FOR' + user.id, this.getChatsById(user.id))
@@ -50,10 +44,16 @@ export class ChatGateway {
     this.server.emit('UPDATE_CHATS_FOR' + recipientId, recipientsChats)
   }
 
+  @SubscribeMessage('TYPING')
+  handleTyping(@MessageBody() {who, to}: {who: number, to: number}) {
+    const user = this.users.find(u => u.id === who)
+    if (user) user.typingId = to
+
+    this.server.emit('UPDATE_USERS', this.users)
+  }
 
   @SubscribeMessage('ENTER')
   handleEnter(@MessageBody('id') id: number) {
-    console.log('enter user id:' + id)
     const user = this.users.find(u => u.id === id)
     if (user) user.online = true
 
@@ -76,5 +76,23 @@ export class ChatGateway {
       c.secondId === id
     ))
     return res
+  }
+
+  getRandomUser(): User {
+    const customConfig: Config = {
+      dictionaries: [adjectives, names],
+      separator: ' ',
+      length: 2
+    }
+
+    const userCount = this.users.length
+    return {
+      id: userCount,
+      name: uniqueNamesGenerator(customConfig),
+      imgURL: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8dXNlcnxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80',
+      online: true,
+      info: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. A animi deserunt ea esse magnam quidem sunt? Ad aperiam, blanditiis debitis, ducimus esse fuga iure maxime molestiae praesentium recusandae, repudiandae vel?',
+      typingId: -1
+    }
   }
 }
