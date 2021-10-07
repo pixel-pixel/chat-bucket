@@ -39,7 +39,8 @@ export default class extends Vue {
   messageText: string = ''
 
   get messagesReverse() {
-    return this.messages.reverse()
+    const arr = [...this.messages]
+    return arr.reverse()
   }
 
   mounted() {

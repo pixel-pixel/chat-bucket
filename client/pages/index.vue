@@ -74,14 +74,14 @@ export default class Index extends Vue {
   }
 
   checkUser() {
-    const user = localStorage.getItem('user211356q1x1j10q')
+    const user = localStorage.getItem('user211356q1x1j10q2x')
     if (user) {
       this.me = JSON.parse(user)
       this.enter()
       this.subsToChats()
     } else {
       this.socket.emit('CREATE_USER', null, (user: User) => {
-        localStorage.setItem('user211356q1x1j10q', JSON.stringify(user))
+        localStorage.setItem('user211356q1x1j10q2x', JSON.stringify(user))
         this.me = user
         this.subsToChats()
       })
