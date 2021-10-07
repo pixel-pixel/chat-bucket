@@ -59,7 +59,6 @@ export class ChatGateway {
 
   @SubscribeMessage('EXIT')
   handleExit(@MessageBody('id') id: number) {
-    console.log('user id:' + id)
     const user = this.users.find(u => u.id === id)
     if (user) user.online = false
 

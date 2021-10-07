@@ -57,7 +57,10 @@ export default class Index extends Vue {
       reconnection: false
     })
     this.checkUser()
-    this.subsToUsers()
+    window.onbeforeunload= (e: any) => {
+      this.socket.emit('EXIT', { id: this.me?.id })
+      return confirm('Sure?')
+    }
   }
 
   subsToUsers() {
@@ -73,26 +76,22 @@ export default class Index extends Vue {
   }
 
   checkUser() {
-    const user = localStorage.getItem('0iv2fa9x0u211356q1x1j10q2xq1d411dsa8zz0')
+    const user = localStorage.getItem('UserData120')
     if (user) {
       this.me = JSON.parse(user)
       this.enter()
       this.subsToChats()
+      this.subsToUsers()
     } else {
       this.socket.emit('CREATE_USER', null, (user: User) => {
-        localStorage.setItem('0iv2fa9x0u211356q1x1j10q2xq1d411dsa8zz0', JSON.stringify(user))
-        this.me = user
-        this.subsToChats()
+        localStorage.setItem('UserData120', JSON.stringify(user))
+        window.location.reload()
       })
     }
   }
 
   enter() {
     this.socket.emit('ENTER', { id: this.me?.id })
-  }
-
-  exit() {
-    this.socket.emit('EXIT', { id: this.me?.id })
   }
 }
 </script>
@@ -113,9 +112,7 @@ export default class Index extends Vue {
 
 .root {
   display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: stretch;
   position: relative;
   max-width: 100vw;
@@ -131,7 +128,7 @@ export default class Index extends Vue {
   display: flex;
   flex-direction: column;
   justify-content: stretch;
-  flex-grow: 100;
+  flex-grow: 10;
 }
 
 .user-list {
