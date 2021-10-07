@@ -1,2 +1,2 @@
 # chat-bucket
-💬 Everyone-friend chat application build on Nuxt🖖 and Nest🪢
+```npm run dev``` for run on localhost:3000
