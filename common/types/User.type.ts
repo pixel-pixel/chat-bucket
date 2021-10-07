@@ -5,4 +5,5 @@ export type User = {
   online: boolean
   info: string
   typingId?: number
+  bot?: boolean
 }
