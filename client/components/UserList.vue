@@ -96,5 +96,6 @@ export default class extends Vue {
 
 .users {
   flex-grow: 1;
+  overflow-y: auto;
 }
 </style>

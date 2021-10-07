@@ -59,7 +59,6 @@ export class ChatGateway {
 
   @SubscribeMessage('EXIT')
   handleExit(@MessageBody('id') id: number) {
-    console.log('user id:' + id)
     const user = this.users.find(u => u.id === id)
     if (user) user.online = false
 
@@ -89,11 +88,10 @@ export class ChatGateway {
   }
 
   getChatsById(id: number) {
-    const res = this.chats.filter(c => (
+    return  this.chats.filter(c => (
       c.firstId === id ||
       c.secondId === id
     ))
-    return res
   }
 
   getRandomUser(): User {

@@ -28,7 +28,6 @@ export default class SpamBot extends Bot {
 
   onMessage(msg: Message, send: (m: Message) => void) {
     const d = this.ids.find(id => id === msg.senderId)
-    console.log(d)
     if (!d) {
       this.ids.push(msg.senderId)
 
