@@ -1,22 +1,22 @@
 <template>
   <div class="chat-li">
-    <img class="photo" :src="user.imgURL" />
-    <div v-show="user.online" class="online" />
+    <img class="photo" :src="data.user.imgURL" />
+    <div v-show="data.user.online" class="online" />
 
     <div class="text-div">
-      <h6 class="name">{{ user.name }}</h6>
-      <p class="last-msg">{{ user.lastMsg }}</p>
+      <h6 class="name">{{ data.user.name }}</h6>
+      <p class="last-msg">{{ data.lastMsg }}</p>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'nuxt-property-decorator';
-import { User } from '../../common/types/User.type';
+import { User } from '~/common/types/User.type';
 
 @Component({name: 'ListItem'})
 export default class extends Vue {
-  @Prop() user!: User
+  @Prop() data!: {user: User, lastMsg: string}
 }
 </script>
 

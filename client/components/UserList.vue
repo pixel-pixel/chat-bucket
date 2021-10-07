@@ -2,23 +2,23 @@
   <div class='user-list'>
     <div class='user-list__btns'>
       <div class='list-btn'
-           :class='{"list-btn_active": isOnline}'
-           @click='isOnline = true'>
+           :class='{"list-btn_active": isOnlineSearch}'
+           @click='isOnlineSearch = true'>
         <span class='label'>Online</span>
       </div>
       <div class='list-btn'
-           :class='{"list-btn_active": !isOnline}'
-           @click='isOnline = false'>
+           :class='{"list-btn_active": !isOnlineSearch}'
+           @click='isOnlineSearch = false'>
         <span class='label'>All</span>
       </div>
     </div>
 
     <div class='users'>
       <UserItem
-        v-for='user in usersList'
-        :key='user.name'
-        :user='user'
-        @click.native='onChoose(user.id)'
+        v-for='data in dataList'
+        :key='data.user.name'
+        :data='data'
+        @click.native='onChoose(data.user.id)'
       />
     </div>
 
@@ -32,22 +32,22 @@ import { User } from '~/common/types/User.type'
 
 @Component({name: 'UserList'})
 export default class extends Vue {
-  @Prop() users!: User[]
+  @Prop() usersData!: {user: User, lastMsg: string }[]
   @Prop() onChoose!: (id: number) => void
-  isOnline = false
+  isOnlineSearch = false
   search = ''
 
-  get usersList() {
+  get dataList() {
     const normalizedSearch = this.search.toLowerCase()
-    const searchedUsers = this.users.filter(u => {
-      const normalizedName =  u.name.toLowerCase()
+    const searchedUsersData = this.usersData.filter(d => {
+      const normalizedName =  d.user.name.toLowerCase()
       return normalizedName.includes(normalizedSearch)
     })
 
-    if (this.isOnline) {
-      return searchedUsers.filter(u => u.online)
+    if (this.isOnlineSearch) {
+      return searchedUsersData.filter(d => d.user.online)
     }
-    return searchedUsers
+    return searchedUsersData
   }
 }
 </script>
