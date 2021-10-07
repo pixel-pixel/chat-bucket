@@ -12,7 +12,12 @@
     </div>
 
     <div class='controls'>
-      <input v-model='messageText' type='text'>
+      <input
+        v-model='messageText'
+        type='text'
+        placeholder='Start chatting!'
+        @keydown.enter='sendMsg'
+      />
       <button @click='sendMsg'>Send message</button>
     </div>
   </div>
@@ -40,15 +45,19 @@ export default class extends Vue {
   }
 
   sendMsg() {
-    const msg: Message = {
-      senderId: this.me.id,
-      senderName: this.me.name,
-      recipientId: this.user.id,
-      recipientName: this.user.name,
-      text: this.messageText,
-      time: this.time
+    const text = this.messageText.trim()
+    if (text) {
+      const msg: Message = {
+        senderId: this.me.id,
+        senderName: this.me.name,
+        recipientId: this.user.id,
+        recipientName: this.user.name,
+        text: this.messageText,
+        time: this.time
+      }
+      this.socket.emit('SEND_MESSAGE', msg)
+      this.messageText = ''
     }
-    this.socket.emit('SEND_MESSAGE', msg)
   }
 
   get time() {

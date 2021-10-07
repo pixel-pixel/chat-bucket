@@ -22,7 +22,12 @@
       />
     </div>
 
-    <input v-model='search' class='input' type='text'  />
+    <input
+      v-model='search'
+      placeholder='Search...'
+      class='input'
+      type='text'
+    />
   </div>
 </template>
 
